@@ -1,0 +1,54 @@
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.pkl
+.python-version
+# --- Virtual Environments ---
+venv/
+env/
+.venv/
+ENV/
+
+# --- Flask / Instance ---
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# --- Logs ---
+*.log
+logs/
+*.out
+
+# --- Cache / Build ---
+*.egg-info/
+.eggs/
+dist/
+build/
+.cache/
+.pytest_cache/
+
+# --- OS Files ---
+.DS_Store
+Thumbs.db
+
+# --- IDE / Editor ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- Environment Variables ---
+.env
+.env.*
+*.secret
+*.key
+
+# --- Node (if you ever add frontend tooling) ---
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
