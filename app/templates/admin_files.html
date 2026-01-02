@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>File Management</h2>
+
+<div style="max-width: 600px; width: 100%;">
+
+    <h3>Uploaded Files</h3>
+
+    {% if files %}
+        {% for f in files %}
+            <div style="margin-bottom: 1rem; padding: 0.5rem 0; border-bottom: 1px solid #ccc;">
+
+                <p><strong>{{ f.name }}</strong></p>
+                <p>Size: {{ f.size }} bytes</p>
+                <p>Uploaded: {{ f.uploaded | datetimeformat }}</p>
+
+                <p>
+                    <a href="{{ url_for('main.download_file', filename=f.name) }}">Download</a>
+                </p>
+
+                <form method="POST" action="{{ url_for('main.delete_file', filename=f.name) }}">
+                    <button type="submit" style="padding: 4px 10px;">Delete</button>
+                </form>
+
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No uploaded files found.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

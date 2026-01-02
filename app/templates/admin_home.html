@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Admin Dashboard</h2>
+
+<div style="max-width: 600px; width: 100%;">
+
+    <h3>System Overview</h3>
+
+    <p><strong>Uploaded Log Files:</strong> {{ upload_count }}</p>
+    <p><strong>Total QSOs Parsed:</strong> {{ qso_count }}</p>
+    <p><strong>Parks in Database:</strong> {{ park_count }}</p>
+
+    <h3>Management</h3>
+
+    <p><a href="{{ url_for('main.review_uploads') }}">Review Uploads</a></p>
+    <p><a href="{{ url_for('main.scoring_overview') }}">Current Scores</a></p>
+    <p><a href="{{ url_for('main.file_manager') }}">File Management</a></p>
+
+    <hr style="margin: 30px 0; border: 1px solid #ccc;">
+
+    <h3 style="color: #dc3545;">Danger Zone</h3>
+    
+    <p><a href="{{ url_for('main.master_reset') }}" 
+          style="color: #dc3545; font-weight: bold;">
+        ⚠️ Master Reset (Delete Everything)
+    </a></p>
+    <p style="color: #666; font-size: 0.9em;">
+        Use this at the end of the year to prepare for next year's competition.
+    </p>
+
+</div>
+{% endblock %}

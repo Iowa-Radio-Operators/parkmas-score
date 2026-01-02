@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Edit QSO Data</h2>
+
+<div style="max-width: 900px; width: 100%;">
+
+<form method="POST">
+
+    <input type="hidden" name="total_qsos" value="{{ qsos|length }}">
+
+    {% for qso in qsos %}
+        <div style="margin-bottom: 1rem; padding: 0.5rem 0; border-bottom: 1px solid #ccc;">
+            <h4>QSO {{ loop.index }}</h4>
+
+            {% for field, value in qso.items() %}
+                <p>
+                    <strong>{{ field }}:</strong><br>
+                    <input type="text" name="qso_{{ loop.index0 }}_{{ field }}" value="{{ value }}" style="width: 300px;">
+                </p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" style="padding: 6px 12px;">Save Changes</button>
+</form>
+
+<p style="margin-top: 1rem;">
+    <a href="{{ url_for('main.review_uploads') }}">Back to Review</a>
+</p>
+
+</div>
+{% endblock %}

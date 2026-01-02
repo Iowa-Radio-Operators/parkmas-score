@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Park-mas Scoring Overview</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>Operator</th>
+      <th>Total Score</th>
+      <th>Counted QSOs</th>
+      <th>Days</th>
+      <th>Parks</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for op in operators %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ op.operator }}</td>
+      <td>{{ op.total_score }}</td>
+      <td>{{ op.total_qsos }}</td>
+      <td>{{ op.days }}</td>
+      <td>{{ ", ".join(op.parks) }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<hr>
+
+<h2>Daily breakdown</h2>
+{% for op in operators %}
+  <h3>{{ op.operator }}</h3>
+  <ul>
+  {% for (date, park_code), day in op.daily.items() %}
+    <li>
+      {{ date }} — {{ park_code }}:
+      {{ day.score }} points,
+      {{ day.qsos|length }} QSOs
+    </li>
+  {% endfor %}
+  </ul>
+{% endfor %}
+
+{% endblock %}

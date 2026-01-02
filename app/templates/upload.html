@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Upload ADIF Log</h2>
+
+<p>Upload your ADIF file from your activation or hunting session. The system will process QSOs and apply Parkmas scoring rules.</p>
+
+{% if error %}
+    <p style="color: red; font-weight: bold;">{{ error }}</p>
+{% endif %}
+
+{% if success %}
+    <p style="color: green; font-weight: bold;">{{ success }}</p>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data" style="margin-top: 20px;">
+
+    <!-- Styled file picker -->
+    <label for="adif_file"
+           style="padding: 10px 20px;
+                  font-size: 1.15rem;
+                  margin-top: 10px;
+                  background-color: #e0e0e0;
+                  border-radius: 4px;
+                  display: inline-block;
+                  cursor: pointer;">
+        Select ADIF File
+    </label>
+
+    <!-- Hidden real file input -->
+    <input type="file"
+           id="adif_file"
+           name="adif_file"
+           accept=".adi,.adif"
+           style="display: none;">
+
+    <!-- Filename display -->
+    <span id="file-name" style="margin-left: 10px; font-size: 1.1rem;"></span>
+
+    <br>
+
+    <!-- Upload button -->
+    <button type="submit"
+            style="padding: 10px 20px;
+                   font-size: 1.15rem;
+                   margin-top: 15px;">
+        Upload
+    </button>
+</form>
+
+<!-- JS to show selected filename -->
+<script>
+document.getElementById('adif_file').addEventListener('change', function() {
+    const fileNameSpan = document.getElementById('file-name');
+    fileNameSpan.textContent = this.files.length ? this.files[0].name : '';
+});
+</script>
+
+{% endblock %}

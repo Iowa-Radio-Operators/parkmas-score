@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Parkmas Leaderboard</h1>
+
+<p class="update-info">
+    Current standings for the 12 Days of Parkmas competition (July 12–24, 2025).
+</p>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Operator</th>
+                <th>Total Score</th>
+                <th>Parks Activated</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for op in operators %}
+            <tr>
+                <td><strong>{{ loop.index }}</strong></td>
+                <td>{{ op.operator }}</td>
+                <td>{{ op.total_score }}</td>
+                <td>{{ ", ".join(op.parks) if op.parks else "—" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if not operators %}
+    <p>No scores yet. Check back soon!</p>
+{% endif %}
+
+{% endblock %}

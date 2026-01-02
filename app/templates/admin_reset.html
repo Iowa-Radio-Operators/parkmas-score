@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>⚠️ Master Reset</h2>
+
+<div style="max-width: 700px; width: 100%;">
+
+    {% if success %}
+        <div style="padding: 20px; background: #d4edda; border: 2px solid #28a745; margin-bottom: 20px; border-radius: 4px;">
+            <p style="color: #155724; font-weight: bold; margin: 0;">{{ success }}</p>
+        </div>
+        
+        <p><a href="{{ url_for('main.admin_home') }}">Return to Admin Dashboard</a></p>
+        
+    {% else %}
+    
+        <div style="padding: 20px; background: #f8d7da; border: 2px solid #dc3545; margin-bottom: 20px; border-radius: 4px;">
+            <h3 style="color: #721c24; margin-top: 0;">⚠️ DANGER ZONE ⚠️</h3>
+            <p style="color: #721c24; margin: 0;">
+                This will <strong>permanently delete</strong>:
+            </p>
+            <ul style="color: #721c24;">
+                <li>All QSO records</li>
+                <li>All log entries</li>
+                <li>All park records</li>
+                <li>All uploaded ADIF files</li>
+            </ul>
+            <p style="color: #721c24; margin-bottom: 0;">
+                <strong>This action CANNOT be undone!</strong>
+            </p>
+        </div>
+
+        {% if error %}
+            <p style="color: red; font-weight: bold; padding: 10px; background: #fff3cd; border: 1px solid #ffc107;">
+                {{ error }}
+            </p>
+        {% endif %}
+
+        <form method="POST">
+            <p><strong>To confirm, type:</strong> <code>DELETE EVERYTHING</code></p>
+            
+            <input type="text" 
+                   name="confirmation" 
+                   placeholder="Type here to confirm" 
+                   required 
+                   style="width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px;">
+            
+            <button type="submit" 
+                    style="padding: 12px 24px; 
+                           background: #dc3545; 
+                           color: white; 
+                           font-size: 16px; 
+                           font-weight: bold;
+                           border: none;
+                           cursor: pointer;
+                           border-radius: 4px;">
+                🗑️ DELETE EVERYTHING
+            </button>
+        </form>
+
+        <p style="margin-top: 30px;">
+            <a href="{{ url_for('main.admin_home') }}">← Cancel and return to Admin Dashboard</a>
+        </p>
+        
+    {% endif %}
+
+</div>
+{% endblock %}

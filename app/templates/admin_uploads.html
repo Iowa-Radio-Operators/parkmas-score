@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Review Uploads</h2>
+
+<div style="max-width: 700px; width: 100%;">
+
+    {% if files %}
+        {% for f in files %}
+            <div style="margin-bottom: 1rem; padding: 0.5rem 0; border-bottom: 1px solid #ccc;">
+
+                <p><strong>{{ f.name }}</strong></p>
+                <p>Size: {{ f.size }} bytes</p>
+                <p>Uploaded: {{ f.uploaded | datetimeformat }}</p>
+                <p>QSOs Detected: {{ f.qso_count }}</p>
+
+                <p>
+                    <a href="{{ url_for('main.download_file', filename=f.name) }}">Download</a>
+                </p>
+
+                <form method="GET" action="{{ url_for('main.edit_upload', filename=f.name) }}" style="display:inline;">
+                    <button type="submit" style="padding: 4px 10px;">Edit</button>
+                </form>
+
+                <form method="POST" action="{{ url_for('main.accept_upload', filename=f.name) }}" style="display:inline;">
+                    <button type="submit" style="padding: 4px 10px;">Accept</button>
+                </form>
+
+                <form method="POST" action="{{ url_for('main.reject_upload', filename=f.name) }}" style="display:inline;">
+                    <button type="submit" style="padding: 4px 10px;">Reject</button>
+                </form>
+
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No pending uploads.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

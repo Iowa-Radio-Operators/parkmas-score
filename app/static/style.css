@@ -1,0 +1,194 @@
+/* Global layout */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Title bar */
+.title-bar {
+    background-color: #30638e;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+}
+
+/* Left side of title bar */
+.title-left a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.title-left a:hover {
+    text-decoration: underline;
+}
+
+/* Right-side navigation inside title bar */
+.title-right a {
+    color: #ffffff;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.title-right a:hover {
+    text-decoration: underline;
+}
+
+/* Refresh button (optional per page) */
+.refresh-button {
+    background-color: #ffffff;
+    color: #30638e;
+    border: 2px solid #ffffff;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.refresh-button:hover {
+    background-color: #e0e0e0;
+}
+
+/* Main content area */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+}
+
+/* Update info text */
+.update-info {
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Table container */
+.table-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+td {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+/* Loss / BER color coding */
+.loss-cell.green, .ber-cell.green {
+    background-color: #d4edda;
+    color: #155724;
+    font-weight: bold;
+}
+
+.loss-cell.yellow, .ber-cell.yellow {
+    background-color: #fff3cd;
+    color: #856404;
+    font-weight: bold;
+}
+
+.loss-cell.red, .ber-cell.red {
+    background-color: #f8d7da;
+    color: #721c24;
+    font-weight: bold;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .title-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .title-right {
+        margin-top: 0.5rem;
+    }
+
+    .title-right a {
+        margin-left: 1rem;
+    }
+
+    .refresh-button {
+        align-self: flex-end;
+    }
+}
+/* Edit Member Form Layout */
+.edit-form {
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.edit-form label {
+    font-weight: bold;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.edit-form input,
+.edit-form select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.edit-form button {
+    padding: 10px 16px;
+    font-size: 1rem;
+    margin-top: 10px;
+    width: fit-content;
+}
+
+/* Checkbox alignment fix */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
