@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from datetime import timedelta
-from .models import db, User, Log, QSO, Park, QsoPark
+from .models import db, User, Log, QSO, Park, QsoPark, DailyMultiplier
 
 
 def create_app():
@@ -18,10 +18,9 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SECRET_KEY"] = "devkey"
-
+    
     # Session timeout: 2 hours of inactivity
     app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=2)
-
 
     db.init_app(app)
 

@@ -2,7 +2,7 @@ from collections import defaultdict
 from datetime import datetime
 from app import db
 
-VALID_MODES = {"SSB", "CW", "FT8", "FT4", "RTTY", "PSK31", "FM"}
+VALID_MODES = {"SSB", "CW",}
 
 
 def get_qso_local_date(qso):
@@ -37,7 +37,7 @@ def get_qso_power(qso):
         return None
 
 
-def score_qsos_for_operator(qsos):
+def score_qsos_for_operator(qsos, operator_name=None):
     """
     Score QSOs for a single operator across all days/parks.
     
@@ -76,6 +76,18 @@ def score_qsos_for_operator(qsos):
         }
     """
     print(f"\n=== SCORING DEBUG: Processing {len(qsos)} QSOs ===")
+    
+    # Load daily multipliers for this operator if provided
+    from .models import DailyMultiplier
+    daily_bonuses = {}
+    if operator_name:
+        bonuses = DailyMultiplier.query.filter_by(operator=operator_name).all()
+        for bonus in bonuses:
+            daily_bonuses[bonus.date] = {
+                'multiplier': bonus.multiplier,
+                'reason': bonus.reason
+            }
+        print(f"Loaded {len(daily_bonuses)} daily bonus multipliers for {operator_name}")
     
     # Sort all QSOs by datetime to process chronologically
     sorted_qsos = sorted([q for q in qsos if q.datetime_on], key=lambda q: q.datetime_on)
@@ -126,6 +138,14 @@ def score_qsos_for_operator(qsos):
             day_score = 0
             skipped_mode = 0
             
+            # Check for daily bonus multiplier
+            daily_bonus = daily_bonuses.get(qso_date, {'multiplier': 1.0, 'reason': None})
+            daily_mult = daily_bonus['multiplier']
+            daily_reason = daily_bonus['reason']
+            
+            if daily_mult != 1.0:
+                print(f"📌 Daily bonus: ×{daily_mult} - {daily_reason}")
+            
             for qso in sorted(qsos_list, key=lambda q: q.datetime_on):
                 mode = (qso.mode or "").upper()
                 
@@ -152,6 +172,11 @@ def score_qsos_for_operator(qsos):
                     multiplier *= 2
                     score_breakdown.append(f"×2 QRP ({power}W)")
                 
+                # Daily bonus multiplier
+                if daily_mult != 1.0:
+                    multiplier *= daily_mult
+                    score_breakdown.append(f"×{daily_mult} bonus")
+                
                 score = score * multiplier
                 
                 qso_scores[qso.id] = score
@@ -171,6 +196,8 @@ def score_qsos_for_operator(qsos):
                 "park_code": park_code,
                 "date": qso_date,
                 "is_new_park": is_new_park,
+                "daily_multiplier": daily_mult,
+                "daily_multiplier_reason": daily_reason,
             }
             
             total_score += day_score

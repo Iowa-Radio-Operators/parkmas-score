@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Set Daily Bonus Multiplier</h2>
+
+<div style="max-width: 600px; width: 100%;">
+    <p><strong>Operator:</strong> {{ operator }}</p>
+    <p><strong>Date:</strong> {{ date }}</p>
+    
+    <form method="POST" style="margin-top: 20px;">
+        <p>
+            <label for="multiplier"><strong>Multiplier:</strong></label><br>
+            <input type="number" 
+                   id="multiplier" 
+                   name="multiplier" 
+                   step="0.1" 
+                   min="0.1"
+                   value="{{ current_multiplier }}" 
+                   required
+                   style="width: 150px; padding: 8px; font-size: 16px; margin-top: 5px;">
+        </p>
+        
+        <p>
+            <label for="reason"><strong>Reason (optional):</strong></label><br>
+            <input type="text" 
+                   id="reason" 
+                   name="reason" 
+                   value="{{ current_reason }}" 
+                   placeholder="e.g., Longest contact, DX achievement, etc."
+                   style="width: 100%; padding: 8px; font-size: 16px; margin-top: 5px;">
+        </p>
+        
+        <button type="submit" style="padding: 10px 20px; font-size: 16px; margin-top: 15px;">
+            Save Multiplier
+        </button>
+        
+        {% if current_multiplier != 1.0 %}
+        <button type="submit" 
+                name="delete" 
+                value="true"
+                onclick="return confirm('Are you sure you want to delete this multiplier?');"
+                style="padding: 10px 20px; font-size: 16px; margin-top: 15px; margin-left: 10px; background: #dc3545; color: white;">
+            Delete Multiplier
+        </button>
+        {% endif %}
+    </form>
+    
+    <p style="margin-top: 20px;">
+        <a href="{{ url_for('main.scoring_overview') }}">Back to Scoring</a>
+    </p>
+</div>
+{% endblock %}

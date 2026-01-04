@@ -38,6 +38,24 @@
       {{ date }} — {{ park_code }}:
       {{ day.score }} points,
       {{ day.qsos|length }} QSOs
+      
+      {% if day.is_new_park %}
+        <span style="color: #28a745; font-weight: bold;">✨ NEW PARK</span>
+      {% endif %}
+      
+      {% if day.daily_multiplier and day.daily_multiplier != 1.0 %}
+        <span style="color: #dc3545; font-weight: bold;">
+          ×{{ day.daily_multiplier }} BONUS
+        </span>
+        {% if day.daily_multiplier_reason %}
+          <em>({{ day.daily_multiplier_reason }})</em>
+        {% endif %}
+      {% endif %}
+      
+      <a href="{{ url_for('main.set_daily_multiplier', operator=op.operator, date_str=date.strftime('%Y-%m-%d')) }}" 
+         style="margin-left: 10px; font-size: 0.9em;">
+        [{% if day.daily_multiplier and day.daily_multiplier != 1.0 %}Edit{% else %}Add{% endif %} Bonus]
+      </a>
     </li>
   {% endfor %}
   </ul>

@@ -1,0 +1,47 @@
+sudo nano /etc/systemd/system/parkmas-score.service
+
+sudo nano /etc/systemd/system/parkmas-score.service
+
+
+------------------------------------------------------------------------------------------------
+
+
+[Unit]
+Description=Parkmas Scoring System
+After=network.target
+
+[Service]
+Type=notify
+User=cjutting
+Group=cjutting
+WorkingDirectory=/home/cjutting/parkmas-score
+Environment="PATH=/home/cjutting/.pyenv/versions/parkmas-score-3.11/bin"
+ExecStart=/home/cjutting/.pyenv/versions/parkmas-score-3.11/bin/gunicorn \
+    --bind 0.0.0.0:5052 \
+    --workers 4 \
+    --timeout 120 \
+    --access-logfile /home/cjutting/parkmas-score/logs/access.log \
+    --error-logfile /home/cjutting/parkmas-score/logs/error.log \
+    --log-level info \
+    'app:create_app()'
+
+# Restart policy
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+
+-------------------------------------------------------------------------------------------------
+
+# Reload systemd to recognize the new service
+sudo systemctl daemon-reload
+
+# Enable the service to start on boot
+sudo systemctl enable parkmas-score.service
+
+# Start the service
+sudo systemctl start parkmas-score.service
+
+# Check the status
+sudo systemctl status parkmas-score.service

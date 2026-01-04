@@ -171,3 +171,16 @@ class QsoPark(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     qso_id = db.Column(db.Integer, db.ForeignKey("qsos.id"), nullable=False)
     park_id = db.Column(db.Integer, db.ForeignKey("parks.id"), nullable=False)
+
+
+class DailyMultiplier(db.Model):
+    __tablename__ = "daily_multipliers"
+
+    id = db.Column(db.Integer, primary_key=True)
+    operator = db.Column(db.String(20), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    multiplier = db.Column(db.Float, nullable=False, default=1.0)
+    reason = db.Column(db.String(255))
+    
+    def __repr__(self):
+        return f"<DailyMultiplier {self.operator} {self.date} ×{self.multiplier}>"

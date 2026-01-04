@@ -369,7 +369,7 @@ def scoring_overview():
         .all()
     )
 
-    print("QSOs loaded:", len(qsos))  # DEBUG
+    print("QSOs loaded:", len(qsos))
 
     # Group QSOs by operator
     qsos_by_operator = defaultdict(list)
@@ -387,11 +387,11 @@ def scoring_overview():
 
         qsos_by_operator[operator].append(qso)
 
-    print("Operators found:", list(qsos_by_operator.keys()))  # DEBUG
+    print("Operators found:", list(qsos_by_operator.keys()))
 
     operator_results = []
     for operator, op_qsos in qsos_by_operator.items():
-        result = score_qsos_for_operator(op_qsos)
+        result = score_qsos_for_operator(op_qsos, operator_name=operator)  # Pass operator name
         summary = result["by_operator"]
 
         operator_results.append({
@@ -407,6 +407,66 @@ def scoring_overview():
 
     return render_template("scoring_overview.html", operators=operator_results)
 
+
+@bp.route("/admin/scoring/multiplier/<operator>/<date_str>", methods=["GET", "POST"])
+@admin_required
+def set_daily_multiplier(operator, date_str):
+    """Set or update a daily multiplier for an operator on a specific date"""
+    from datetime import datetime
+    from .models import DailyMultiplier
+    
+    try:
+        date_obj = datetime.strptime(date_str, "%Y-%m-%d").date()
+    except ValueError:
+        return "Invalid date format", 400
+    
+    if request.method == "POST":
+        # Check if this is a delete request
+        if request.form.get("delete"):
+            dm = DailyMultiplier.query.filter_by(
+                operator=operator,
+                date=date_obj
+            ).first()
+            
+            if dm:
+                db.session.delete(dm)
+                db.session.commit()
+            
+            return redirect(url_for("main.scoring_overview"))
+        
+        # Otherwise, save/update the multiplier
+        multiplier = float(request.form.get("multiplier", 1.0))
+        reason = request.form.get("reason", "").strip()
+        
+        # Find or create multiplier
+        dm = DailyMultiplier.query.filter_by(
+            operator=operator,
+            date=date_obj
+        ).first()
+        
+        if not dm:
+            dm = DailyMultiplier(operator=operator, date=date_obj)
+            db.session.add(dm)
+        
+        dm.multiplier = multiplier
+        dm.reason = reason
+        db.session.commit()
+        
+        return redirect(url_for("main.scoring_overview"))
+    
+    # GET request - show form
+    dm = DailyMultiplier.query.filter_by(
+        operator=operator,
+        date=date_obj
+    ).first()
+    
+    return render_template(
+        "set_multiplier.html",
+        operator=operator,
+        date=date_str,
+        current_multiplier=dm.multiplier if dm else 1.0,
+        current_reason=dm.reason if dm else ""
+    )
 
 @bp.route("/admin/debug_qsos")
 @admin_required
