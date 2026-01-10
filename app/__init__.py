@@ -1,8 +1,10 @@
 import os
 from flask import Flask
 from datetime import timedelta
+from dotenv import load_dotenv
 from .models import db, User, Log, QSO, Park, QsoPark, DailyMultiplier
 
+load_dotenv()
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
@@ -17,7 +19,9 @@ def create_app():
     db_path = os.path.join(app.instance_path, "parkmas.db")
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SECRET_KEY"] = "devkey"
+    
+    # Load secret key from environment or use dev key
+    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "devkey")
     
     # Session timeout: 2 hours of inactivity
     app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=2)
@@ -47,6 +51,10 @@ def create_app():
 
     app.register_blueprint(auth)
     app.register_blueprint(main_bp)
+
+    # NEW: Setup centralized authentication routes
+    from .client_auth import setup_auth_routes
+    setup_auth_routes(app)
 
     print("Using DB:", db_path)
     
