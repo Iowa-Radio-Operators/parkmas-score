@@ -13,17 +13,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# =====================================================
-# CONFIGURATION
-# =====================================================
-
-APP_CODE = 'parkmas'
-APP_SECRET = os.getenv('APP_SECRET', 'CHANGE_ME_parkmas_secret_key_2024')
-
-# For local testing, use localhost
-CENTRAL_AUTH_URL = os.getenv('CENTRAL_AUTH_URL', 'http://localhost:5000')
-THIS_APP_URL = os.getenv('THIS_APP_URL', 'http://localhost:5001')
-
 
 # =====================================================
 # AUTHENTICATION FUNCTIONS
@@ -102,7 +91,8 @@ def redirect_to_login():
     """Redirect user to central authentication"""
     from urllib.parse import urlencode
     
-    callback_url = url_for('auth_callback', _external=True)
+    # Use configured app URL to ensure correct scheme (https)
+    callback_url = f"{THIS_APP_URL}/auth/callback"
     
     params = urlencode({
         'app_code': APP_CODE,
