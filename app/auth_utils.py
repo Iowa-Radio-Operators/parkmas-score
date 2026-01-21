@@ -1,12 +1,11 @@
-"""
-DEPRECATED: This file is replaced by client_auth.py
+from functools import wraps
+from flask import session, redirect, url_for
 
-Keep this file for backwards compatibility,
-but all decorators now come from client_auth.py
-"""
 
-# Import from new centralized auth module
-from .client_auth import admin_required
-
-# Keep old function as alias for backwards compatibility
-__all__ = ['admin_required']
+def admin_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if not session.get("user_is_admin"):
+            return redirect(url_for("auth.login"))
+        return f(*args, **kwargs)
+    return wrapper
